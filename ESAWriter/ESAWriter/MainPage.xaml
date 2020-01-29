@@ -6,9 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="500" Height="250">
 
-    <Grid>
-
-    </Grid>
+	<Grid Width="500" Height="250">
+		<TextBlock  HorizontalAlignment="Left" Margin="130,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+		<TextBlock Text="{x:Bind Model.Property2, Mode=TwoWay}" HorizontalAlignment="Left" Margin="130,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+		<Button Click="ButtonTest_Click" Content="Button" Margin="285,130,0,0" VerticalAlignment="Top"/>
+	</Grid>
 </Page>
