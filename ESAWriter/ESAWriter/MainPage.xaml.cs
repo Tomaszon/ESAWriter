@@ -1,4 +1,5 @@
-﻿using ESAWriter.ViewModels;
+﻿using ESAWriter.Models;
+using ESAWriter.ViewModels;
 using System;
 using Windows.UI.Xaml.Controls;
 
@@ -11,8 +12,10 @@ namespace ESAWriter
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
-		public MainPageViewModel Model = new MainPageViewModel();
+		//public MainPageViewModel Model = new MainPageViewModel();
 		private readonly Random r = new Random();
+
+		public Class Class = new Class();
 
 		public MainPage()
 		{
@@ -21,7 +24,11 @@ namespace ESAWriter
 
 		private void ButtonTest_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
 		{
-			Model.Property2 = r.Next(10000);
+			//Model.Property2 = r.Next(10000);
+
+			Class.A = r.Next(10000);
+
+
 		}
 	}
 }

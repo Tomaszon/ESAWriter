@@ -9,5 +9,7 @@ namespace ESAWriter.ViewModels
 		public string Property1 { get; set; } = "Some text";
 
 		public int Property2 { get; set; } = 12345;
+
+		public int A { get; }
 	}
 }
