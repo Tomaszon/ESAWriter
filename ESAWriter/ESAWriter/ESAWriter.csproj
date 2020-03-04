@@ -123,6 +123,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Class.cs" />
+    <Compile Include="Models\SampleViewModel.cs" />
     <Compile Include="Models\Document\Background.cs" />
     <Compile Include="Models\Document\Border.cs" />
     <Compile Include="Models\Document\BorderStyle.cs" />
