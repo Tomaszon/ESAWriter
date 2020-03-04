@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace ESAWriter.Models
 {
 	public class SampleViewModel : ViewModelBase
 	{
-		public ViewModelProperty<string, int> A { get { return A.Get(); } set { Set(A, value); } }
+		public ViewModelProperty<string, int> A { get { return Get<string, int>(nameof(A)); } set { Set(nameof(A), value); } }
 
 		public SampleViewModel(ModelBase model) : base(model)
 		{
-			InitProperty(A, nameof(A), p => $"Formatted: {p}");
+			A = BindProperty<string, int>(nameof(A), p => $"Formatted: {p}");
 		}
 	}
 
@@ -18,21 +20,35 @@ namespace ESAWriter.Models
 	{
 		private readonly ModelBase _model;
 
+		private readonly Dictionary<string, object> _vars = new Dictionary<string, object>();
+
 		public ViewModelBase(ModelBase model)
 		{
 			_model = model;
 		}
 
-		protected void InitProperty<TGet, TSet>(ViewModelProperty<TGet, TSet> property, string modelPropertyName, Func<TSet, TGet> format)
+		protected ViewModelProperty<TGet, TSet> BindProperty<TGet, TSet>(string modelPropertyName, Func<TSet, TGet> format)
 		{
-			property = new ViewModelProperty<TGet, TSet>(_model, modelPropertyName, format);
+			return new ViewModelProperty<TGet, TSet>(_model, modelPropertyName, format);
 		}
 
-		protected void Set<TGet, TSet>(ViewModelProperty<TGet, TSet> property, TSet value, [CallerMemberName]string name = null)
+		protected void Set<TGet, TSet>(string propertyName, ViewModelProperty<TGet, TSet> value)
 		{
-			property.Set(value);
+			if (value.Tmp)
+			{
+				((ViewModelProperty<TGet, TSet>)_vars[propertyName]).Set(value);
+			}
+			else
+			{
+				_vars.Add(value.PropertyInfo.Name, value);
+			}
 
-			OnPropertyChanged(name);
+			OnPropertyChanged(propertyName);
+		}
+
+		protected ViewModelProperty<TGet, TSet> Get<TGet, TSet>(string propertyName)
+		{
+			return ((ViewModelProperty<TGet, TSet>)_vars[propertyName]).Get();
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -50,69 +66,60 @@ namespace ESAWriter.Models
 
 	public class ModelBase
 	{
-		public T GetProperty<T>(string propertyName)
-		{
-			return (T)GetType().GetProperty(propertyName).GetValue(this);
-		}
 
-		public void SetProperty<T>(string propertyName, T value)
-		{
-			GetType().GetProperty(propertyName).SetValue(this, value);
-		}
 	}
 
 	public class ViewModelProperty<TGet, TSet>
 	{
-		private TGet _getValue;
+		public object TmpValue { get; private set; }
 
-		private TSet _setValue;
+		public bool Tmp { get; private set; }
 
 		private readonly ModelBase _model;
 
-		private readonly string _propertyName;
-
 		private readonly Func<TSet, TGet> _format;
+
+		public PropertyInfo PropertyInfo { get; set; }
 
 		public ViewModelProperty() { }
 
 		public ViewModelProperty(ModelBase model, string propertyName, Func<TSet, TGet> format)
 		{
 			_model = model;
-			_propertyName = propertyName;
+			PropertyInfo = model.GetType().GetProperty(propertyName);
 			_format = format;
 		}
 
 		public static implicit operator ViewModelProperty<TGet, TSet>(TSet value)
 		{
-			return new ViewModelProperty<TGet, TSet>() { _setValue = value };
+			return new ViewModelProperty<TGet, TSet>() { TmpValue = value, Tmp = true };
 		}
 
 		//for setter only
 		public static implicit operator TSet(ViewModelProperty<TGet, TSet> property)
 		{
-			return property._setValue;
+			return (TSet)property.TmpValue;
 		}
 
 		public static implicit operator TGet(ViewModelProperty<TGet, TSet> property)
 		{
-			return property.Get();
+			return (TGet)property.TmpValue;
 		}
 
 		//for getter only
 		public static implicit operator ViewModelProperty<TGet, TSet>(TGet value)
 		{
-			return new ViewModelProperty<TGet, TSet>() { _getValue = value };
+			return new ViewModelProperty<TGet, TSet>() { TmpValue = value, Tmp = true };
 		}
 
 		public void Set(TSet value)
 		{
-			_model.SetProperty(_propertyName, value);
+			PropertyInfo.SetValue(_model, value);
 		}
 
 		public TGet Get()
 		{
-			_getValue = _model.GetProperty<TGet>(_propertyName);
-			return _getValue;
+			return _format.Invoke((TSet)PropertyInfo.GetValue(_model));
 		}
 	}
 }

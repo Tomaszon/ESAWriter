@@ -13,14 +13,16 @@ namespace ESAWriter
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainPage : ESABasePage<SampleModel, SampleViewModel>
+	public sealed partial class MainESAPage : Page
 	{
 		//public MainPageViewModel Model = new MainPageViewModel();
 		private readonly Random r = new Random();
 
 		private readonly Polygon polygon = new Polygon();
 
-		public MainPage() : base()
+		public ModelBase<SampleModel, SampleViewModel> ModelBase = new ModelBase<SampleModel, SampleViewModel>();
+
+		public MainESAPage()
 		{
 			InitializeComponent();
 
@@ -37,25 +39,32 @@ namespace ESAWriter
 			canvas1.Children.Add(polygon);
 		}
 
-		private void ButtonTest_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+		public void ButtonTest_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
 		{
 			//Model.Property2 = r.Next(10000);
 
-			Model.A = r.Next(10000);
+			ModelBase.ViewModel.A = r.Next(10000);
+
+
+			string a = ModelBase.ViewModel.A;
+
+			var b = ModelBase.ViewModel.A;
+
+			string c = b;
 		}
 	}
 
-	public abstract class ESABasePage<TModel, TViewModel> : Page where TViewModel : ViewModelBase where TModel: ModelBase
+	public class ModelBase<TModel, TViewModel> where TModel : ModelBase, new() where TViewModel : ViewModelBase
 	{
-		public ModelBase Model { get; }
+		public TModel Model { get; set; }
 
-		public ViewModelBase ViewModel { get; }
+		public TViewModel ViewModel { get; set; }
 
-		public ESABasePage()
+		public ModelBase(TModel model = null, TViewModel viewModel = null)
 		{
-			Model = new TModel();
+			Model = model ?? new TModel();
 
-			ViewModel = new TViewModel();
+			ViewModel = viewModel ?? (TViewModel)Activator.CreateInstance(typeof(TViewModel), Model);
 		}
 	}
 }
