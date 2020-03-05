@@ -11,7 +11,7 @@
 
 	<Grid Width="500" Height="250" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<Border BorderBrush="Black" BorderThickness="2" CornerRadius="3.2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
-			<TextBlock Text="{x:Bind polygon.Points, Mode=TwoWay}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+			<TextBlock Text="{x:Bind ModelBase.ViewModel.A, Mode=TwoWay}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
 		</Border>
 
 		<Button Click="ButtonTest_Click" Content="Button" Margin="349,114,65,90" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
