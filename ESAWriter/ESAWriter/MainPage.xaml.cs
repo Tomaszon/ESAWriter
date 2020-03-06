@@ -20,15 +20,11 @@ namespace ESAWriter
 
 		private readonly Polygon polygon = new Polygon();
 
-		private Model Model { get; set; } = new Model();
-
-		private View View { get; set; }
+		public ModelContainer<ViewModel<Model>, Model> ModelContainer = new ModelContainer<ViewModel<Model>, Model>();
 
 		public MainESAPage()
 		{
 			InitializeComponent();
-
-			View = new View(Model);
 
 			polygon.Points.Add(new Point(100, 100));
 			polygon.Points.Add(new Point(200, 100));
@@ -40,6 +36,8 @@ namespace ESAWriter
 
 			polygon.Fill = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
 
+
+			ModelContainer.ViewModel.AddFormat(nameof(ModelContainer.ViewModel.A), "Formatted: {0} {1} {0}");
 			//canvas1.Children.Add(polygon);
 		}
 
@@ -47,7 +45,11 @@ namespace ESAWriter
 		{
 			//Model.Property2 = r.Next(10000);
 
-			Model.A = r.Next(10000);
+			//ViewModel.View.ModifyFormat("A", "F");
+
+			ModelContainer.Model.A = r.Next(10000);
+
+			//ViewModel.View.D = 30;
 		}
 	}
 }

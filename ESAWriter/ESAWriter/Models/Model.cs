@@ -4,24 +4,29 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace ESAWriter.Models
 {
-	public class ModelFactory<TView, TModel>
+	public class ModelContainer<TViewModel, TModel> where TModel : INotifyPropertyChanged, new() where TViewModel : IViewModelInit
 	{
-		public TView View { get; }
+		public TViewModel ViewModel { get; }
 
 		public TModel Model { get; }
 
-		public ModelFactory()
+		public ModelContainer()
 		{
-			TView
+			Model = new TModel();
+
+			ViewModel = (TViewModel)Activator.CreateInstance(typeof(TViewModel), Model);
+
+			ViewModel.InitAccessors();
 		}
 	}
 
-	public class View : ViewBase
+	public class ViewModel<TModel> : ViewModelBase<TModel> where TModel : INotifyPropertyChanged
 	{
-		public string A { get { return Get<string, int>(p => string.Format("A Formatted: {0}", p)); } }
+		public string A { get { return Get<string, int>(p => _formatDictionary.Format(nameof(A), p, (B * 2).ToString() + "zz0")); } }
 
 		public int B { get { return Get<int>(p => p * 2, nameof(Model.A)); } }
 
@@ -29,18 +34,20 @@ namespace ESAWriter.Models
 
 		public int D { get { return Get<int>(nameof(Model.A)); } set { Set(value); } }
 
-		public View(Model model) : base(model) { }
+		public ViewModel(TModel model) : base(model) { }
 	}
 
-	public abstract class ViewBase : INotifyPropertyChanged
+	public abstract class ViewModelBase<TModel> : IViewModelInit, INotifyPropertyChanged where TModel : INotifyPropertyChanged
 	{
 		private readonly ListKeyDictionary _accessors = new ListKeyDictionary();
 
 		private readonly Dictionary<string, PropertyInfo> _modelProperties = new Dictionary<string, PropertyInfo>();
 
-		private readonly Model _model;
+		private readonly TModel _model;
 
-		public ViewBase(Model model)
+		public FormatDictionary _formatDictionary = new FormatDictionary();
+
+		public ViewModelBase(TModel model)
 		{
 			model.PropertyChanged += Model_PropertyChanged;
 
@@ -49,9 +56,24 @@ namespace ESAWriter.Models
 			Array.ForEach(model.GetType().GetProperties(), p => _modelProperties.Add(p.Name, p));
 		}
 
-		protected void InitViewModelProperties()
+		public void InitAccessors()
 		{
 			Array.ForEach(GetType().GetProperties(), p => p.GetValue(this));
+		}
+
+		public void AddFormat(string key, string value)
+		{
+			_formatDictionary.Add(key, value);
+		}
+
+		public void RemoveFormat(string key)
+		{
+			_formatDictionary.Remove(key);
+		}
+
+		public void ModifyFormat(string key, string newValue)
+		{
+			_formatDictionary.Modify(key, newValue);
 		}
 
 		protected void Set(object value, [CallerMemberName]string accessorName = null)
@@ -95,6 +117,11 @@ namespace ESAWriter.Models
 		{
 			keyValuePair.Key.ForEach(k => OnPropertyChanged(k));
 		}
+	}
+
+	public interface IViewModelInit
+	{
+		void InitAccessors();
 	}
 
 	public class Model : ModelBase
@@ -201,6 +228,57 @@ namespace ESAWriter.Models
 		{
 			Key.Add(key);
 			Value = value;
+		}
+	}
+
+	public class FormatDictionary
+	{
+		private readonly Dictionary<string, string> _dic = new Dictionary<string, string>();
+
+		public string this[string key, int argsCount = 1]
+		{
+			get { return key is null ? BuildDefaultFormatString(argsCount) : _dic.GetValueOrDefault(key, BuildDefaultFormatString(argsCount)); }
+		}
+
+		public string Format(string formatStringKey, params object[] args)
+		{
+			string f = this[formatStringKey, args.Length];
+			try
+			{
+				return string.Format(f, args);
+			}
+			catch
+			{
+				return string.Format(BuildDefaultFormatString(args.Length), args);
+			}
+		}
+
+		public void Add(string key, string format)
+		{
+			_dic.Add(key, format);
+		}
+
+		public void Remove(string key)
+		{
+			_dic.Remove(key);
+		}
+
+		public void Modify(string key, string newValue)
+		{
+			Remove(key);
+
+			Add(key, newValue);
+		}
+
+		private string BuildDefaultFormatString(int count)
+		{
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < count; i++)
+			{
+				sb.Append($"{{{i}}} ");
+			}
+
+			return sb.ToString().TrimEnd(' ');
 		}
 	}
 }
