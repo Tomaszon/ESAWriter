@@ -9,18 +9,20 @@
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="695" Height="385">
 	<Grid Width="695" Height="385" HorizontalAlignment="Center" VerticalAlignment="Center">
-		<!--<Border BorderBrush="Black" BorderThickness="2" CornerRadius="3.2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
+		<Border BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" BorderThickness="2" CornerRadius="3.2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
 			<TextBlock Text="{x:Bind View.A, Mode=OneWay}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
-		</Border>-->
+		</Border>
 
-		<Border BorderBrush="Black" BorderThickness="2" CornerRadius="3.2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,10,0,0">
-			<TextBlock Text="{x:Bind View.B, Mode=OneWay}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+		<Border BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" BorderThickness="2" CornerRadius="3.2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="250,10,0,0">
+			<TextBlock Text="{x:Bind View.B, Mode=OneWay}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" />
 		</Border>
 		
 		<Button Click="ButtonTest_Click" Content="Button" Margin="349,114,266,230" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 		<!--<Border BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0">
 			<Canvas Name="canvas1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="300" Height="200" FocusVisualSecondaryBrush="#99FFFFFF"/>
 		</Border>-->
-		<!--<TextBox HorizontalAlignment="Left" Margin="321,40,0,0" Text="{x:Bind Model.A, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" VerticalAlignment="Top"/>-->
+		<TextBox HorizontalAlignment="Left" Margin="321,40,0,0" Text="{x:Bind Model.A, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+		<TextBox HorizontalAlignment="Left" Margin="521,40,0,0" Text="{x:Bind View.C, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  TextWrapping="Wrap" VerticalAlignment="Top"/>
 	</Grid>
 </Page>

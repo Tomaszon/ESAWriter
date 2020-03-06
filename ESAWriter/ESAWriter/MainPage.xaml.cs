@@ -20,7 +20,7 @@ namespace ESAWriter
 
 		private readonly Polygon polygon = new Polygon();
 
-		private Class Model { get; set; } = new Class();
+		private Model Model { get; set; } = new Model();
 
 		private View View { get; set; }
 
@@ -48,7 +48,6 @@ namespace ESAWriter
 			//Model.Property2 = r.Next(10000);
 
 			Model.A = r.Next(10000);
-
 		}
 	}
 }
