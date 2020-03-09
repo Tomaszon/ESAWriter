@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Property for TomaszonModelContainer models with get and set methods.</Title>
+            <Shortcut>modelprop</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CSharp">
+                <![CDATA[public $type$ $name$ { get { return Get<$type$>(); } set { Set(value); } }]]>
+            </Code>
+            <Declarations>
+                <Literal>
+                <ID>type</ID>
+                <ToolTip>Property type</ToolTip>
+                <Default>string</Default>
+                </Literal>
+                <Literal>
+                <ID>name</ID>
+                <ToolTip>Property name</ToolTip>
+                <Default>A</Default>
+                </Literal>
+            </Declarations>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

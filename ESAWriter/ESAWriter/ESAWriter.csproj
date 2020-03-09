@@ -122,9 +122,6 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model.cs" />
-    <Compile Include="Models\ViewModel2.cs" />
-    <Compile Include="Models\SampleViewModel.cs" />
     <Compile Include="Models\Document\Background.cs" />
     <Compile Include="Models\Document\Border.cs" />
     <Compile Include="Models\Document\BorderStyle.cs" />
@@ -173,6 +170,12 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ModelContainer\ModelContainer\ModelContainer\ModelContainer.csproj">
+      <Project>{b4baa21b-4d5b-4921-969d-c84edfe2c88c}</Project>
+      <Name>ModelContainer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
