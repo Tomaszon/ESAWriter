@@ -1,4 +1,5 @@
 ﻿using ESAWriter.Models;
+using ESAWriter.ViewModels;
 using System;
 using Windows.Foundation;
 using Windows.UI;
@@ -37,7 +38,7 @@ namespace ESAWriter
 			polygon.Fill = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
 
 
-			ModelContainer.ViewModel.AddFormat(nameof(ModelContainer.ViewModel.A), "Formatted: {0} {1} {0}");
+			ModelContainer.ViewModel.FormatStrings.Add(nameof(ModelContainer.ViewModel.A), "Formatted: {0} {1} {0}");
 			//canvas1.Children.Add(polygon);
 		}
 
