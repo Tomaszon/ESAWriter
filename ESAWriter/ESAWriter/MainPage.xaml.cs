@@ -21,7 +21,7 @@ namespace ESAWriter
 
 		private readonly Polygon polygon = new Polygon();
 
-		public ModelContainer<ViewModel<Model>, Model> ModelContainer = new ModelContainer<ViewModel<Model>, Model>();
+		public ModelContainer<ViewModel, Model> ModelContainer = new ModelContainer<ViewModel, Model>();
 
 		public MainESAPage()
 		{
@@ -49,7 +49,7 @@ namespace ESAWriter
 			//ViewModel.View.ModifyFormat("A", "F");
 
 			ModelContainer.Model.A = r.Next(10000);
-
+			
 			//ViewModel.View.D = 30;
 		}
 	}
