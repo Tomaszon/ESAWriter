@@ -1,5 +1,5 @@
-﻿using ESAWriter.Models;
-using ESAWriter.ViewModels;
+﻿using ESAWriter.ViewModels;
+using ModelContainer;
 using System;
 using Windows.Foundation;
 using Windows.UI;
@@ -49,7 +49,7 @@ namespace ESAWriter
 			//ViewModel.View.ModifyFormat("A", "F");
 
 			ModelContainer.Model.A = r.Next(10000);
-			
+
 			//ViewModel.View.D = 30;
 		}
 	}

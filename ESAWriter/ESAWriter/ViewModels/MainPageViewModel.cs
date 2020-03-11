@@ -1,5 +1,4 @@
-﻿using ESAWriter.Models;
-using System.ComponentModel;
+﻿using ModelContainer;
 
 namespace ESAWriter.ViewModels
 {
